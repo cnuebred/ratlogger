@@ -77,16 +77,17 @@ const loggerFlags = (args: string[]) => {
 const parser = (type: string, _args: string[]) => {
     const specification = configuration.renders[type] // | another base
     if (!specification) return
-    const { args, flagsObject } = loggerFlags(_args)
     const appendix = {
-        prev: args[0] == '\n' ? '\n' : '',
-        next: args[args.length - 1] == '\n' ? '\n' : '',
+        prev: _args[0] == '\n' ? '\n' : '',
+        next: _args[_args.length - 1] == '\n' ? '\n' : '',
     }
-    if (appendix.prev) args.shift()
-    if (appendix.next) args.pop()
+    if (appendix.prev) _args.shift()
+    if (appendix.next) _args.pop()
+
+    const { args, flagsObject } = loggerFlags(_args)
 
     const log = renderNode(specification.render, args)
-    if (!flagsObject.nofile)
+    if (!flagsObject.nofile && !!configuration.logger.dir)
         loggerToFile(log, type)
 
     return `${appendix.prev}${log}${appendix.next}`
