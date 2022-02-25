@@ -82,8 +82,8 @@ module.exports = {
 }
 ```
 ![logfile](https://imgur.com/1yj4tPj.png)
-If you want to disable save to file for all just leave `logger.dir` empty as `''`
-Default all of logs are saved to file, you can disable it with flag as `[nofile]` in args - on the end of args. Sample: 
+#### If you want to disable save to file for all just leave `logger.dir` empty as `''`
+#### Default all of logs are saved to file, you can disable it with flag as `[nofile]` in args - on the end of args. Sample: 
 ```js
 logger.log('yoyo', '[nofile]')
 ```
@@ -101,7 +101,7 @@ app()
 ```
 
 ## Exceptions
-To add next or prev line to log, but over any socket, just put on start or end `\n`
+#### To add next or prev line to log, but over any socket, just put on start or end `\n`
 ```js
     logger.log('yoyo', '[nofile]')
     logger.log('\n', 'yoyo', '[nofile]', '\n')
