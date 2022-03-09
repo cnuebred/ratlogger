@@ -13,14 +13,12 @@ const methodNode = (module: string, content: string): string => {
 }
 
 const styleNode = (module: string): string => {
-    const styleMap = []
-    const modulePart = module.split(' ').filter(item => item)
-    for (const item of modulePart) {
-        const style = styles[item]
-        if (!style) continue
-        styleMap.push(`\x1b[${style}m`)
+    const reduceQuery = (acc, curr) => {
+        const style = styles[curr]
+        return style ? acc + `\x1b[${style}m` : acc
     }
-    return styleMap.join('')
+    return module.split(' ').filter(item => !!item)
+        .reduce(reduceQuery, '')
 }
 
 const renderParser = (render: string, content: string, insertLevel: number = 5) => {
@@ -33,13 +31,9 @@ const renderParser = (render: string, content: string, insertLevel: number = 5) 
     }
 
     const moduleArrayStyle = render.matchAll(regexp.styleGlobal)
-    for (const module of moduleArrayStyle)
-        render = render.replace(regexp.style, styleNode(module[2]))
+    for (const module of moduleArrayStyle) { render = render.replace(regexp.style, styleNode(module[2])) }
 
-
-
-    if (insertLevel > 0 && !!render.match(regexp.methodGlobal))
-        render = renderParser(render, content, insertLevel - 1)
+    if (insertLevel > 0 && !!render.match(regexp.methodGlobal)) { render = renderParser(render, content, insertLevel - 1) }
 
     render += '\x1b[0m'
     render = render.replaceAll('#{:}', '')
@@ -50,8 +44,7 @@ const renderParser = (render: string, content: string, insertLevel: number = 5) 
 const renderNode = (renders: string[], args: string[]) => {
     const logArray = []
     const content = args.map(item => {
-        if (typeof item != 'string')
-            return JSON.stringify(item)
+        if (typeof item !== 'string') { return JSON.stringify(item) }
         return item
     }).join(' ')
 
@@ -60,7 +53,6 @@ const renderNode = (renders: string[], args: string[]) => {
     })
 
     return logArray.join(' ')
-
 }
 
 const loggerFlags = (args: string[]) => {
@@ -79,7 +71,7 @@ const parser = (type: string, _args: string[]) => {
     if (!specification) return
     const appendix = {
         prev: _args[0] == '\n' ? '\n' : '',
-        next: _args[_args.length - 1] == '\n' ? '\n' : '',
+        next: _args[_args.length - 1] == '\n' ? '\n' : ''
     }
     if (appendix.prev) _args.shift()
     if (appendix.next) _args.pop()
@@ -87,8 +79,7 @@ const parser = (type: string, _args: string[]) => {
     const { args, flagsObject } = loggerFlags(_args)
 
     const log = renderNode(specification.render, args)
-    if (!flagsObject.nofile && !!configuration.logger.dir)
-        loggerToFile(log, type)
+    if (!flagsObject.nofile && !!configuration.logger.dir) { loggerToFile(log, type) }
 
     return `${appendix.prev}${log}${appendix.next}`
 }

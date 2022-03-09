@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch ./ --ext ts,js,json --exec npx ts-node -T ./main.ts ",
-    "lint": "eslint --project ./ --fix"
+    "dev": "nodemon --watch ./ --ext ts,js,json --exec npx ts-node -T ./main",
+    "lint": "eslint . --fix"
   },
   "keywords": [
     "log",
